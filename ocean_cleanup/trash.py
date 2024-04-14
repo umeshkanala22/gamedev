@@ -7,7 +7,7 @@ class Trash(pygame.sprite.Sprite):
         super().__init__()
 
         # Load random trash image
-        trash_images = ['trash/bottle.png', 'trash/soda.png', 'trash/water_bottle.png']  # Replace with actual image filenames
+        trash_images = ['assets/trash/bottle.png', 'assets/trash/soda.png', 'assets/trash/water_bottle.png']  # Replace with actual image filenames
         self.image = pygame.image.load(random.choice(trash_images)).convert_alpha()
 
         # Scale the image (optional)
@@ -18,6 +18,8 @@ class Trash(pygame.sprite.Sprite):
         self.rect.x = random.randrange(SCREEN_WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
         self.speed = random.randrange(1, 2)
+
+        self.status = "active"
 
     def update(self):
         self.rect.y += self.speed

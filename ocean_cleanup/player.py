@@ -7,17 +7,16 @@ class Net(pygame.sprite.Sprite):
         super().__init__(net_group)
 
         # Load net image (PNG format)
-        self.image = pygame.image.load('player/net.png').convert_alpha()
+        self.image = pygame.image.load('assets/player/net.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (40, 60))
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
 
-        # Set initial position for net (centered at bottom of boat)
+        # Set initial position for net (centered at bottom of submarine)
         self.rect.centerx = x
         self.rect.bottom = y
 
         self.speed = 10
-
 
     def update(self):
         # Move net upwards
@@ -36,8 +35,8 @@ class Ship(pygame.sprite.Sprite):
         super().__init__(all_sprites)
 
         # Load ship image (PNG format)
-        self.image = pygame.image.load('player/ship.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (80, 60))
+        self.image = pygame.image.load('assets/player/ship.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (120, 120))
         self.rect = self.image.get_rect()
 
         # Set initial position for ship (top of water i.e. 20% of screen height)
@@ -67,7 +66,7 @@ class Submarine(pygame.sprite.Sprite):
         super().__init__(all_sprites)
 
         # Load submarine image (PNG format)
-        self.image = pygame.image.load('player/submarine.png').convert_alpha()
+        self.image = pygame.image.load('assets/player/submarine.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (80, 60))
         self.rect = self.image.get_rect()
 
@@ -84,7 +83,7 @@ class Submarine(pygame.sprite.Sprite):
 
     def fire_net(self):
         # Create a net sprite
-        net = Net(self.rect.centerx, self.rect.top+10, self.net_group)
+        net = Net(self.rect.centerx, self.rect.centery, self.net_group)
         self.net_group.add(net)
         self.all_sprites.add(net)
 

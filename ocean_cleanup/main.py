@@ -50,6 +50,9 @@ water_colors = [
     (214, 216, 212),  # Gray (repeated for smoother transition)
 ]
 
+# last collision time (trash and submarine)
+last_collision_time = 0
+
 # Create initial trash
 for i in range(5):
     trash = Trash()
@@ -104,6 +107,20 @@ while running:
                     net.kill()
                     score += 1
 
+        # Check for collisions between trash and submarine using masks
+        for trash in trash_group:
+            if pygame.sprite.collide_mask(trash, Submarine):
+                trash.kill()
+                #slow down the submarine
+                Submarine.speed -= 1
+                last_collision_time = pygame.time.get_ticks()
+
+        
+        # Check if the submarine has been slowed down for 5 seconds
+        if pygame.time.get_ticks() - last_collision_time >= 5000:
+            if Submarine.speed < 5:
+                Submarine.speed += 1
+
 
         # create new trash if less than 5 trash on screen
         if len(trash_group) < 5:
@@ -111,10 +128,12 @@ while running:
             all_sprites.add(trash)
             trash_group.add(trash)
 
+
         # Check for missed trash
         for trash in trash_group:
-            if trash.rect.bottom ==  SCREEN_HEIGHT:
+            if trash.rect.bottom == SCREEN_HEIGHT and trash.status != "missed":
                 missed_trash_count += 1
+                trash.status = "missed"
                 # trash.kill()
 
         if missed_trash_count >= 5:
@@ -125,11 +144,13 @@ while running:
     water_color = water_colors[stage]
 
     # Fill 20% sky and then 80% water
-    screen.fill("#D0FFFE")
+    sky_image = pygame.image.load("assets/sky.jpg").convert_alpha()
+    sky_image = pygame.transform.scale(sky_image, (SCREEN_WIDTH, int(SCREEN_HEIGHT * 0.3)))
+    screen.blit(sky_image, (0, 0))
     pygame.draw.rect(
         screen,
         water_color,
-        pygame.Rect(0, SCREEN_HEIGHT * 0.2, SCREEN_WIDTH, SCREEN_HEIGHT),
+        pygame.Rect(0, SCREEN_HEIGHT * 0.3, SCREEN_WIDTH, SCREEN_HEIGHT),
     )
 
     all_sprites.draw(screen)
