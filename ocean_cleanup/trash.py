@@ -12,8 +12,9 @@ class Trash(pygame.sprite.Sprite):
 
         # Scale the image (optional)
         self.image = pygame.transform.scale(self.image, (30, 30))
-
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+
         self.rect.x = random.randrange(SCREEN_WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
         self.speed = random.randrange(1, 2)

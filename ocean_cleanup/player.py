@@ -10,6 +10,7 @@ class Net(pygame.sprite.Sprite):
         self.image = pygame.image.load('player/net.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (40, 60))
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
 
         # Set initial position for net (centered at bottom of boat)
         self.rect.centerx = x
@@ -61,7 +62,7 @@ class Ship(pygame.sprite.Sprite):
         # Draw ship
         screen.blit(self.image, self.rect)
 
-class Player(pygame.sprite.Sprite):
+class Submarine(pygame.sprite.Sprite):
     def __init__(self, all_sprites, net_group):
         super().__init__(all_sprites)
 
@@ -69,6 +70,9 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load('player/submarine.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (80, 60))
         self.rect = self.image.get_rect()
+
+        # Create a mask for collision detection
+        self.mask = pygame.mask.from_surface(self.image)
 
         # Set initial position for submarine
         self.rect.centerx = SCREEN_WIDTH // 2
@@ -84,17 +88,21 @@ class Player(pygame.sprite.Sprite):
         self.net_group.add(net)
         self.all_sprites.add(net)
 
-
-
     def update(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        # move submarine left or right with arrow keys or A and D keys
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= self.speed
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.rect.x += self.speed
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            self.rect.y -= self.speed
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            self.rect.y += self.speed
 
         # Keep submarine within screen boundaries
         self.rect.x = max(0, min(self.rect.x, SCREEN_WIDTH - self.rect.width))
+        self.rect.y = max(SCREEN_HEIGHT * 0.6, min(self.rect.y, SCREEN_HEIGHT - self.rect.height))
 
     def draw(self, screen):
         # Draw submarine

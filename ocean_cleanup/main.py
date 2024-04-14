@@ -1,5 +1,5 @@
 import pygame
-from player import Player
+from player import Submarine
 from trash import Trash
 from settings import SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -18,8 +18,8 @@ all_sprites = pygame.sprite.Group()
 trash_group = pygame.sprite.Group()
 net_group = pygame.sprite.Group()
 
-player = Player(all_sprites, net_group)
-all_sprites.add(player)
+Submarine = Submarine(all_sprites, net_group)
+all_sprites.add(Submarine)
 
 # Variable to track whether a net has been fired recently
 net_fired = False
@@ -78,7 +78,7 @@ while running:
             and event.type == pygame.KEYDOWN
             and event.key == pygame.K_SPACE
         ):
-            player.fire_net()
+            Submarine.fire_net()
             net_fired = True
 
         # Check for spacebar release
@@ -96,10 +96,14 @@ while running:
     if not is_paused and not game_over:  # Only update and draw if game is not paused and not over
         all_sprites.update()
 
-        # Check for collisions between trash and nets
-        hits = pygame.sprite.groupcollide(trash_group, net_group, True, True)
-        for hit in hits:
-            score += 1
+        # Check for collisions between trash and nets using masks
+        for trash in trash_group:
+            for net in net_group:
+                if pygame.sprite.collide_mask(trash, net):
+                    trash.kill()
+                    net.kill()
+                    score += 1
+
 
         # create new trash if less than 5 trash on screen
         if len(trash_group) < 5:
@@ -133,14 +137,6 @@ while running:
     # Render score text
     score_text = score_font.render("Score: " + str(score), True, (0, 0, 0))
     screen.blit(score_text, (10, 10))
-
-    # continue to next stage of the game
-    if score >= 10:
-        # Render "Congratulations" text
-        congrats_text = font.render("Congratulations!", True, (0, 255, 0))
-        text_rect = congrats_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        screen.blit(congrats_text, text_rect)
-        # add a button to continue to the next stage
         
 
     if game_over or is_paused:
