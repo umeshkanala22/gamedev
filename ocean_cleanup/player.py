@@ -13,6 +13,8 @@ class Net(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
 
+        self.status = "active"
+
         # Set initial position for net (centered at bottom of submarine)
         self.rect.centerx = x
         self.rect.bottom = y
@@ -24,8 +26,9 @@ class Net(pygame.sprite.Sprite):
         self.rect.y -= self.speed
 
         # Remove net if it goes off screen
-        if self.rect.bottom < 0:
-            self.kill()
+        if self.rect.top < 0.3*SCREEN_HEIGHT-10:
+            self.status = "missed"
+            self.speed = 0
 
     def draw(self, screen):
         # Draw net
@@ -121,6 +124,16 @@ class Submarine(pygame.sprite.Sprite):
         bubble_size = random.randint(10, 30)
         bubble = Bubble(self.rect.centerx, self.rect.centery, bubble_size, self.all_sprites)
         self.all_sprites.add(bubble)
+
+
+    def remove_submarine(self):
+        speed = 3
+        while self.rect.right < 0:  # Move until the right side of the submarine is off-screen
+            self.rect.x += speed
+            pygame.time.Clock().tick(30)  # Limit frame rate to 30 FPS
+        self.kill()
+
+
     
 
     def update(self):
