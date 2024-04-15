@@ -1,7 +1,9 @@
 import pygame
-from player import Submarine
+from player import Submarine, Bubble
 from trash import Trash
 from settings import SCREEN_HEIGHT, SCREEN_WIDTH
+from utils import Button
+import time
 
 # Initialize the game
 pygame.init()
@@ -17,6 +19,7 @@ clock = pygame.time.Clock()
 all_sprites = pygame.sprite.Group()
 trash_group = pygame.sprite.Group()
 net_group = pygame.sprite.Group()
+bubble_group = pygame.sprite.Group()
 
 Submarine = Submarine(all_sprites, net_group)
 all_sprites.add(Submarine)
@@ -29,6 +32,7 @@ missed_trash_count = 0
 
 # Variable to track the score
 score = 0
+completion = False
 
 # font for game over text
 font = pygame.font.SysFont(None, 72)
@@ -38,23 +42,24 @@ score_font = pygame.font.SysFont(None, 36)
 
 # Water color stages
 water_colors = [
-    (208, 238, 225),  # Light Blue
-    (214, 216, 212),  # Gray
-    (206, 193, 186),  # Light Brown
-    (182, 165, 158),  # Dark Brown
-    (152, 133, 133),  # Grayish Brown
-    (182, 165, 158),  # Dark Brown (repeated for smoother transition)
-    (206, 193, 186),  # Light Brown (repeated for smoother transition)
-    (214, 216, 212),  # Gray (repeated for smoother transition)
-    (208, 238, 225),  # Light Blue (repeated for smoother transition)
-    (214, 216, 212),  # Gray (repeated for smoother transition)
+     (69,89,78), # dirtiest water
+    (104,133,115),
+    (138,178,154),
+    (162,193,175),
+    (67,179,229),
+    (56,165,222),
+    (42,152,213),
+    (20,135,200)
 ]
 
 # last collision time (trash and submarine)
 last_collision_time = 0
 
+# last bubble time
+last_bubble_time = time.time()
+
 # Create initial trash
-for i in range(5):
+for i in range(5):  
     trash = Trash()
     all_sprites.add(trash)
     trash_group.add(trash)
@@ -107,24 +112,33 @@ while running:
                     net.kill()
                     score += 1
 
+        # create bubble every 3 seconds
+        if time.time() - last_bubble_time >= 1:
+            Submarine.release_bubble()
+            last_bubble_time = time.time()
+
         # Check for collisions between trash and submarine using masks
         for trash in trash_group:
-            if pygame.sprite.collide_mask(trash, Submarine):
+            if pygame.sprite.collide_mask(trash, Submarine) and trash.status != "missed":
                 trash.kill()
                 #slow down the submarine
-                Submarine.speed -= 1
+                Submarine.speed -= 1.5
                 last_collision_time = pygame.time.get_ticks()
 
         
         # Check if the submarine has been slowed down for 5 seconds
         if pygame.time.get_ticks() - last_collision_time >= 5000:
             if Submarine.speed < 5:
-                Submarine.speed += 1
+                if Submarine.speed + 1 <= 5:
+                    Submarine.speed += 1
+                else:
+                    Submarine.speed = 5
 
 
         # create new trash if less than 5 trash on screen
         if len(trash_group) < 5:
             trash = Trash()
+            all_sprites.add(trash)
             all_sprites.add(trash)
             trash_group.add(trash)
 
@@ -140,7 +154,7 @@ while running:
             game_over = True
 
     # Determine water color based on score
-    stage = min(score // 10, len(water_colors) - 1)  # Determine stage based on score
+    stage = min(score // 2, len(water_colors) - 1)  # Determine stage based on score
     water_color = water_colors[stage]
 
     # Fill 20% sky and then 80% water
