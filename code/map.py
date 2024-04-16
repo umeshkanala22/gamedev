@@ -1,21 +1,22 @@
+import pygame 
 from settings import *
-from spirites import Sprite
+from player import Player
 
 class Level:
-	def __init__(self, tmx_map):
+	def __init__(self):
+
+		# get the display surface
 		self.display_surface = pygame.display.get_surface()
 
-		# groups 
+		# sprite groups
 		self.all_sprites = pygame.sprite.Group()
 
-		self.setup(tmx_map)
+		self.setup()
 
-	def setup(self, tmx_map):
-		for x, y, surf in tmx_map.get_layer_by_name('Terrain').tiles():
-			Sprite((x * TILE_SIZE,y * TILE_SIZE), surf, self.all_sprites)
+	def setup(self):
+		self.player = Player((64,36), self.all_sprites)
 
-
-	def run(self, dt):
-		self.all_sprites.update(dt)
+	def run(self,dt):
 		self.display_surface.fill('black')
 		self.all_sprites.draw(self.display_surface)
+		self.all_sprites.update(dt)
