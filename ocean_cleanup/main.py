@@ -1,5 +1,5 @@
 import pygame
-from player import Submarine, Bubble
+from player import Submarine, Bubble, Ship
 from trash import Trash
 from settings import SCREEN_HEIGHT, SCREEN_WIDTH
 from utils import Button
@@ -21,8 +21,9 @@ trash_group = pygame.sprite.Group()
 net_group = pygame.sprite.Group()
 bubble_group = pygame.sprite.Group()
 
-Submarine = Submarine(all_sprites, net_group)
-all_sprites.add(Submarine)
+submarine = Submarine(all_sprites, net_group, bubble_group)
+all_sprites.add(submarine)
+ship = Ship(net_group, trash_group)
 
 # Variable to track whether a net has been fired recently
 net_fired = False
@@ -77,6 +78,8 @@ game_over = False
 is_paused = False  # Initialize pause state
 is_fullscreen = False  # Initialize full screen state
 
+stage_2_setup = False
+
 game_stage = 1
 
 while running:
@@ -95,8 +98,9 @@ while running:
             and not game_over
             and event.type == pygame.KEYDOWN
             and event.key == pygame.K_SPACE
+            and game_stage == 1
         ):
-            Submarine.fire_net()
+            submarine.fire_net()
             net_fired = True
 
         # Check for spacebar release
@@ -112,9 +116,6 @@ while running:
                 )
             else:
                 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-    # Update and draw sprites
-    # all_sprites.update()
 
     # Fill 20% sky and then 80% water
     stage = min(score // 2, len(water_colors) - 1)  # Determine stage based on score
@@ -157,27 +158,27 @@ while running:
 
             # create bubble every 3 seconds
             if time.time() - last_bubble_time >= 1:
-                Submarine.release_bubble()
+                submarine.release_bubble()
                 last_bubble_time = time.time()
 
             # Check for collisions between trash and submarine using masks
             for trash in trash_group:
                 if (
-                    pygame.sprite.collide_mask(trash, Submarine)
+                    pygame.sprite.collide_mask(trash, submarine)
                     and trash.status != "missed"
                 ):
                     trash.kill()
                     # slow down the submarine
-                    Submarine.speed -= 1.5
+                    submarine.speed -= 1.5
                     last_collision_time = pygame.time.get_ticks()
 
             # Check if the submarine has been slowed down for 5 seconds
             if pygame.time.get_ticks() - last_collision_time >= 5000:
-                if Submarine.speed < 5:
-                    if Submarine.speed + 1 <= 5:
-                        Submarine.speed += 1
+                if submarine.speed < 5:
+                    if submarine.speed + 1 <= 5:
+                        submarine.speed += 1
                     else:
-                        Submarine.speed = 5
+                        submarine.speed = 5
 
             # update minimum trash
             minimum_trash = 5 + score // 5
@@ -209,26 +210,45 @@ while running:
             if score >= score_target:
                 completion = True
 
-
     if game_stage == 2:
         if (
             not is_paused and not game_over and not completion
         ):
-            all_sprites.update()
-            # remove all inactive trash
-            for trash in trash_group:
-                if trash.status == "active":
-                    trash.kill()
-            for net in net_group:
-                if net.status == "active":
-                    net.kill()
+            if ship.rect.left > 150:
+                ship.update()
+            else:
+                if not submarine:
+                    ship.rect.x += 1.5
 
-            Submarine.kill()
+            bubble_group.update()
+            # remove all inactive trash
+            if stage_2_setup == False:
+                stage_2_setup = True
+                all_sprites.add(ship)
+
+            if submarine:
+                if submarine.rect.left < SCREEN_WIDTH:
+                    submarine.rect.x += 1.5
+                else:
+                    submarine.kill()
+                    submarine = None
+
             
-            # while Submarine.rect.left < SCREEN_WIDTH:
-            #     Submarine.rect.x += 2
-            #     pygame.time.Clock().tick(60)
-    # Determine water color based on score
+            # settle down the nets to the ocean floor
+            for net in net_group:
+                if net.status != "settled":
+                    net.rect.y += 1
+                if net.rect.bottom > SCREEN_HEIGHT:
+                    net.rect.bottom = SCREEN_HEIGHT
+                    net.status = "settled"
+
+            # settle down the trash to the ocean floor
+            for trash in trash_group:
+                if trash.status != "settled":
+                    trash.rect.y += 1
+                if trash.rect.bottom > SCREEN_HEIGHT:
+                    trash.rect.bottom = SCREEN_HEIGHT
+                    trash.status = "settled"
 
     all_sprites.draw(screen)
 
@@ -263,7 +283,7 @@ while running:
         continue_button = Button(
             SCREEN_WIDTH // 2 - 50,
             SCREEN_HEIGHT // 2 + 125,
-            100,
+            300,
             50,
             "CONTINUE",
             (0, 0, 0),
@@ -275,9 +295,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             if continue_button.is_clicked(pos):
-                print("Continue button clicked")
                 completion = False
-                score = 0
                 game_stage = 2
 
     if game_over or is_paused:

@@ -1,7 +1,7 @@
 import pygame
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 import random
-
+import time
 
 class Net(pygame.sprite.Sprite):
     def __init__(self, x, y, net_group):
@@ -30,13 +30,20 @@ class Net(pygame.sprite.Sprite):
             self.status = "missed"
             self.speed = 0
 
+    def settle_down(self):
+        # Settle down the net at the bottom of the screen
+        self.rect.y += self.speed
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.status = "settled"
+            self.speed = 0
+
     def draw(self, screen):
         # Draw net
         screen.blit(self.image, self.rect)
 
 class Bubble(pygame.sprite.Sprite):
-    def __init__(self, x, y, size, bubble_group):
-        super().__init__(bubble_group)
+    def __init__(self, x, y, size):
+        super().__init__()
 
         # Load bubble image (PNG format)
         self.image = pygame.image.load('assets/player/bubble1.png').convert_alpha()
@@ -62,20 +69,24 @@ class Bubble(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 class Ship(pygame.sprite.Sprite):
-    def __init__(self, all_sprites):
-        super().__init__(all_sprites)
+    def __init__(self, net_group, trash_group):
+        super().__init__()
 
         # Load ship image (PNG format)
         self.image = pygame.image.load('assets/player/ship.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (120, 120))
         self.rect = self.image.get_rect()
 
+        # Create a mask for collision detection
+        self.mask = pygame.mask.from_surface(self.image)
+
         # Set initial position for ship (top of water i.e. 20% of screen height)
-        self.rect.centerx = SCREEN_WIDTH // 2
-        self.rect.bottom = SCREEN_HEIGHT * 0.2
+        self.rect.centerx = -60 # Ship starts off-screen
+        self.rect.bottom = SCREEN_HEIGHT * 0.32
 
         self.speed = 5
-        self.all_sprites = all_sprites
+        self.net_group = net_group
+        self.trash_group = trash_group
 
     
     def update(self):
@@ -93,7 +104,7 @@ class Ship(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 class Submarine(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, net_group):
+    def __init__(self, all_sprites, net_group, bubble_group):
         super().__init__(all_sprites)
 
         # Load submarine image (PNG format)
@@ -111,6 +122,7 @@ class Submarine(pygame.sprite.Sprite):
         self.speed = 5
         self.net_group = net_group
         self.all_sprites = all_sprites
+        self.bubble_group = bubble_group
 
     def fire_net(self):
         # Create a net sprite
@@ -122,18 +134,9 @@ class Submarine(pygame.sprite.Sprite):
     def release_bubble(self):
         # Create a bubble sprite
         bubble_size = random.randint(10, 30)
-        bubble = Bubble(self.rect.centerx, self.rect.centery, bubble_size, self.all_sprites)
+        bubble = Bubble(self.rect.centerx, self.rect.centery, bubble_size)
         self.all_sprites.add(bubble)
-
-
-    def remove_submarine(self):
-        speed = 3
-        while self.rect.right < 0:  # Move until the right side of the submarine is off-screen
-            self.rect.x += speed
-            pygame.time.Clock().tick(30)  # Limit frame rate to 30 FPS
-        self.kill()
-
-
+        self.bubble_group.add(bubble)
     
 
     def update(self):

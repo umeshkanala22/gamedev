@@ -16,6 +16,7 @@ class Button:
         self.status = "inactive"
 
     def draw(self, screen):
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
         text = self.font.render(self.text, True, self.font_color)
         text_rect = text.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
         screen.blit(text, text_rect)
