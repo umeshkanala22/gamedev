@@ -92,6 +92,8 @@ def start_screen(screen):
     pygame.display.flip()
 
     # Wait for a key press to start the game
+    # wait for 2 seconds
+    time.sleep(2)
     wait_for_key()
 
 
@@ -137,6 +139,7 @@ def stage_one_complete_screen(screen):
     show_text_on_screen(screen, stage_2_info_2, 30, SCREEN_HEIGHT // 2 + 40)
     show_text_on_screen(screen, "Press any key to continue...", 20, SCREEN_HEIGHT * 2 // 3)
     pygame.display.flip()
+    time.sleep(1)
     wait_for_key()
 
 def victory_screen(screen):
