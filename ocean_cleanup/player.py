@@ -41,6 +41,32 @@ class Net(pygame.sprite.Sprite):
         # Draw net
         screen.blit(self.image, self.rect)
 
+class SpaceShip(pygame.sprite.Sprite):
+    def __init__(self, all_sprites):
+        super().__init__()
+
+        self.image = pygame.image.load('assets/player/spaceship.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.rect = self.image.get_rect()
+
+        self.rect.centerx = -60
+        self.rect.bottom = SCREEN_HEIGHT * 0.15
+
+        self.speed = 4
+        self.light_range = 200  # Range of light in pixels
+
+        self.all_sprites = all_sprites
+
+    def update(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.rect.x -= self.speed
+        if keys[pygame.K_RIGHT]:
+            self.rect.x += self.speed
+
+        # Keep ship within screen boundaries
+        self.rect.x = max(0, min(self.rect.x, SCREEN_WIDTH - self.rect.width))
+
 class Bubble(pygame.sprite.Sprite):
     def __init__(self, x, y, size):
         super().__init__()
@@ -66,41 +92,6 @@ class Bubble(pygame.sprite.Sprite):
 
     def draw(self, screen):
         # Draw bubble
-        screen.blit(self.image, self.rect)
-
-class Ship(pygame.sprite.Sprite):
-    def __init__(self, net_group, trash_group):
-        super().__init__()
-
-        # Load ship image (PNG format)
-        self.image = pygame.image.load('assets/player/ship.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (120, 120))
-        self.rect = self.image.get_rect()
-
-        # Create a mask for collision detection
-        self.mask = pygame.mask.from_surface(self.image)
-
-        # Set initial position for ship (top of water i.e. 20% of screen height)
-        self.rect.centerx = -60 # Ship starts off-screen
-        self.rect.bottom = SCREEN_HEIGHT * 0.32
-
-        self.speed = 5
-        self.net_group = net_group
-        self.trash_group = trash_group
-
-    
-    def update(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.rect.x -= self.speed
-        if keys[pygame.K_RIGHT]:
-            self.rect.x += self.speed
-
-        # Keep ship within screen boundaries
-        self.rect.x = max(0, min(self.rect.x, SCREEN_WIDTH - self.rect.width))
-
-    def draw(self, screen):
-        # Draw ship
         screen.blit(self.image, self.rect)
 
 class Submarine(pygame.sprite.Sprite):
