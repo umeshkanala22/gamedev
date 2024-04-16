@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="37" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="52">
+<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="100" height="37" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="52">
  <tileset firstgid="1" source="../tsx/swampsmall.tsx"/>
  <tileset firstgid="2263" source="../tsx/swamp2til.tsx"/>
  <tileset firstgid="3666" name="river" tilewidth="128" tileheight="128" tilecount="26" columns="0">
@@ -83,7 +83,7 @@
    <image width="64" height="64" source="../../graphics/craftpix-net-471748-free-undead-tileset-top-down-pixel-art/PNG/Objects_separately/Bones_shadow1_7.png"/>
   </tile>
  </tileset>
- <tileset firstgid="3692" source="swampriver.tsx"/>
+ <tileset firstgid="3692" source="../tsx/swampriver.tsx"/>
  <layer id="1" name="Tile Layer 1" width="100" height="37">
   <data encoding="csv">
 434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,434,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,3693,
