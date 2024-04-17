@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
 		# general setup
 		self.image = self.animations[self.status][self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
+		self.z=LAYERS['road']
 
 		# movement attributes
 		self.direction = pygame.math.Vector2()
@@ -63,17 +64,22 @@ class Player(pygame.sprite.Sprite):
 		# tool use
 
 	def move(self,dt):
+		speedup=0
+		keys=pygame.key.get_pressed()
+		if keys[pygame.K_LSHIFT]:
+			speedup=1
 
 		# normalizing a vector 
 		if self.direction.magnitude() > 0:
 			self.direction = self.direction.normalize()
 
 		# horizontal movement
-		self.pos.x += self.direction.x * self.speed * dt
+	
+		self.pos.x += self.direction.x * (speedup+1)*self.speed * dt
 		self.rect.centerx = self.pos.x
 
 		# vertical movement
-		self.pos.y += self.direction.y * self.speed * dt
+		self.pos.y += self.direction.y * (speedup+1)*self.speed * dt
 		self.rect.centery = self.pos.y
 
 	def update(self, dt):
