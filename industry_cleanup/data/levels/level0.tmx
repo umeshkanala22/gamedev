@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="18" tileheight="18" infinite="0" nextlayerid="7" nextobjectid="4">
- <tileset firstgid="1" source="industrytiles.tsx"/>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="18" tileheight="18" infinite="0" nextlayerid="7" nextobjectid="5">
+ <tileset firstgid="1" source="../tilesets/industrytiles.tsx"/>
  <imagelayer id="5" name="background" locked="1">
-  <image source="../bg.jpg" width="540" height="324"/>
+  <image source="../assets/bg.jpg" width="540" height="324"/>
  </imagelayer>
  <layer id="1" name="base" width="30" height="18">
   <data encoding="csv">
@@ -27,7 +27,7 @@
 </data>
  </layer>
  <objectgroup id="6" name="objects">
-  <object id="2" name="player" x="76.6667" y="152"/>
+  <object id="2" name="player" x="36.917" y="128.15" width="13.5149" height="13.5149"/>
  </objectgroup>
  <layer id="4" name="movable" width="30" height="18">
   <data encoding="csv">
