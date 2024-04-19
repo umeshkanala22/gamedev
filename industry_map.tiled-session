@@ -3,11 +3,43 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "industry_cleanup/data/levels/level1.tmx",
+    "activeFile": "data/tsx/level2.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "data/tsx/level1.tmx": {
+            "expandedObjectLayers": [
+                6,
+                5
+            ],
+            "scale": 0.33,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 3998.4848484848485,
+                "y": 798.4848484848485
+            }
+        },
+        "data/tsx/level2.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 2416,
+                "y": 1082
+            }
+        },
+        "data/tsx/mainfactorytiles.tsx": {
+            "scaleInDock": 1
+        },
+        "data/tsx/movableobjects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "data/tsx/reqtileset2.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
         "industry_cleanup/data/levels/industrytiles.tsx": {
             "scaleInDock": 1
         },
@@ -20,11 +52,14 @@
             }
         },
         "industry_cleanup/data/levels/level1.tmx": {
-            "scale": 0.10545,
-            "selectedLayer": 1,
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 0.33,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": -3167.3779042200094,
-                "y": 801.3276434329064
+                "x": -121.21212121212125,
+                "y": 753.030303030303
             }
         },
         "industry_cleanup/data/tilesets/industrytiles.tsx": {
@@ -43,7 +78,7 @@
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 269.66666666666663,
+                "x": 270,
                 "y": 67
             }
         },
@@ -57,22 +92,24 @@
             "scaleInEditor": 1
         }
     },
-    "last.imagePath": "C:/Users/Ankit Kumar Meena/Desktop/gamedev/craftpix-net-965049-free-industrial-zone-tileset-pixel-art/3 Objects",
+    "last.imagePath": "C:/Users/Ankit Kumar Meena/Desktop/gamedev/graphics/craftpix-net-965049-free-industrial-zone-tileset-pixel-art/4 Animated objects",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 18,
     "map.tileWidth": 18,
     "openFiles": [
-        "industry_map/level_1.tmx",
-        "industry_map/tileset2.tsx",
-        "industry_cleanup/data/levels/level0.tmx",
-        "industry_cleanup/data/levels/level1.tmx"
+        "data/tsx/level1.tmx",
+        "data/tsx/movableobjects.tsx",
+        "data/tsx/level2.tmx"
     ],
     "project": "industry_map.tiled-project",
     "recentFiles": [
-        "industry_map/level_1.tmx",
+        "data/tsx/level1.tmx",
+        "data/tsx/movableobjects.tsx",
+        "data/tsx/level2.tmx",
         "industry_map/tileset2.tsx",
-        "industry_cleanup/data/levels/level0.tmx",
+        "industry_map/level_1.tmx",
         "industry_cleanup/data/levels/level1.tmx",
+        "industry_cleanup/data/levels/level0.tmx",
         "industry_map/industrytiles.tsx",
         "industry_map/tilemap.tsx"
     ],
