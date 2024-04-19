@@ -74,9 +74,9 @@ class Player2(pygame.sprite.Sprite):
     #         self.jump = True
     #         self.status = 'down'
     def get_status(self):
-        if self.direction.x == 1:
+        if self.direction == 1:
             return 'right'
-        elif self.direction.x == -1:
+        elif self.direction == -1:
             return 'left'
         else:
             return 'down'
@@ -137,23 +137,11 @@ class Player2(pygame.sprite.Sprite):
     def is_dead(self):
         return not self.living
 
-
-    def on_horizontal_moving_block(self):
-        for block in self.horizontal_moving_blocks:
-            if self.rect.colliderect(block.rect):
-                block_dir = block.direction
-                block_speed = block.speed
-                
-                # Move the player with the block horizontally
-                self.rect.x += block_dir * block_speed
-                
-                # Adjust the player's y-coordinate to stay on top of the block
-                self.rect.y = block.rect.y - self.height
-                
-        self.on_moving_block = False
+    # def show_lives(self):
 
     
     def update(self, dt):
+        self.get_status()
         self.animate(dt)
         # self.on_horizontal_moving_block()
 
@@ -171,10 +159,12 @@ class Player2(pygame.sprite.Sprite):
             dx -= 3
             self.counter += 1
             self.direction = -1
+            self.status = 'left'
         if key[pygame.K_RIGHT] or key[pygame.K_d]:
             dx += 3
             self.counter += 1
             self.direction = 1
+            self.status = 'right'
         if key[pygame.K_RIGHT] == False and key[pygame.K_LEFT] == False:
             self.counter = 0
             self.frame_index = 0
@@ -206,7 +196,12 @@ class Player2(pygame.sprite.Sprite):
                 # check if above the ground i.e. falling
                 elif self.vel_y >= 0:
                     if tile in self.death_sprites:
-                        self.living = False
+                        self.life -= 1
+                        if self.life == 0:
+                            self.living = False
+                        else:
+                            self.rect.x = 4*TILE_SIZE
+                            self.rect.y = 0
                     # if tile in self.horizontal_moving_blocks:
                     #     self.rect.x += tile.speed * tile.direction
                     #     self.rect.y = tile.rect.top - self.rect.height - 5

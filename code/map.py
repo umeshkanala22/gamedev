@@ -24,6 +24,10 @@ class Level:
 		self.haschanged = False
 		self.changedto='map'
 
+		self.game_over = False
+
+		self.clock = pygame.time.Clock()
+
 		# setup
 		if self.status =='map':
 			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
@@ -32,7 +36,8 @@ class Level:
 		self.setup()
 		
 
-		
+	def is_game_over(self):
+		return self.game_over
 
 	def setup(self):
 		if self.status=='map':
@@ -122,7 +127,7 @@ class Level:
 						pos = (horizontal_obj.x, horizontal_obj.y),
 						surf = horizontal_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-						speed = 2,
+						speed = 1.5,
 						distance_left= 0,
 						distance_right= 14 * TILE_SIZE)
 				elif horizontal_obj.name == "step_1":
@@ -130,7 +135,7 @@ class Level:
 						pos = (horizontal_obj.x, horizontal_obj.y),
 						surf = horizontal_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-						speed = 2,
+						speed = 1.5,
 						distance_left= 3 * TILE_SIZE,
 						distance_right= 20 * TILE_SIZE)
 				elif horizontal_obj.name == "step_3":
@@ -138,7 +143,7 @@ class Level:
 						pos = (horizontal_obj.x, horizontal_obj.y),
 						surf = horizontal_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-						speed = 2,
+						speed = 1.5,
 						distance_left= 1 * TILE_SIZE,
 						distance_right= 10 * TILE_SIZE)
 			
@@ -148,30 +153,27 @@ class Level:
 						pos = (vertical_obj.x, vertical_obj.y),
 						surf = vertical_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
-						speed = 150,
+						speed = 2,
 						distance_down = 8 * TILE_SIZE,
-						distance_up= 8 * TILE_SIZE
-					)
-				elif vertical_obj.name == "final_gate":
-					Vertical_Moving_Block(
-						pos = (vertical_obj.x, vertical_obj.y),
-						surf = vertical_obj.image,
-						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
-						speed = 150,
-						distance_down = 0,
-						distance_up= 5 * TILE_SIZE
+						distance_up= 25 * TILE_SIZE
 					)
 		# elif self.status=='mainmenu':
 
 	def wait_for_key(self):
 		waiting = True
+		key = None
 		while waiting:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
 				elif event.type == pygame.KEYDOWN:
+					key = pygame.key.get_pressed()
 					waiting = False
+		
+		if key[pygame.K_ESCAPE]:
+			pygame.quit()
+			sys.exit()
 
 
 	def show_text_on_screen(self, screen, text, font_size, y_position):
@@ -184,10 +186,11 @@ class Level:
 	def game_over_screen(self, screen):
 		screen.fill((0, 0, 0))
 		self.show_text_on_screen(screen, "Game Over", 100, SCREEN_HEIGHT // 2)
-		self.show_text_on_screen(screen, "Press any key to exit", 50, SCREEN_HEIGHT // 2 + 100)
+		self.show_text_on_screen(screen, "Press ESC key to exit", 50, SCREEN_HEIGHT // 2 + 100)
+		self.show_text_on_screen(screen, "Press any other key to restart", 50, SCREEN_HEIGHT // 2 + 150)
 		pygame.display.flip()
 		self.wait_for_key()
-		exit()
+		# exit()
 
 	def run(self,dt):
 		if self.status=='map':
@@ -195,22 +198,23 @@ class Level:
 			self.all_sprites.custom_draw(self.players,'map')
 			self.all_sprites.update(dt)
 		elif self.status=='level1':
-			self.display_surface.fill('black')
 			self.all_sprites.custom_draw(self.players,'level1')
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
 			# check that player is alive or not
 			if self.players.is_dead():
+				self.game_over = True
 				self.game_over_screen(self.display_surface)
 		elif self.status=='level2':
-			self.display_surface.fill('black')
+			# self.display_surface.fill('black')
 			self.all_sprites.custom_draw(self.players,'level2')
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
 			# check that player is alive or not
 			if self.players.is_dead():
+				self.game_over = True
 				self.game_over_screen(self.display_surface)
 
 		

@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 import math
+from os.path import join
 # screen
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 1000

@@ -79,7 +79,7 @@ class Vertical_Moving_Block(Sprite):
 		self.direction = 1
 	
 	def update(self, dt):
-		self.rect.y += self.speed * self.direction * dt
+		self.rect.y += self.speed * self.direction
 		if self.rect.y > self.start_pos[1]:
 			self.rect.y = self.start_pos[1]
 			self.direction = -1

@@ -13,6 +13,9 @@ class Game:
 
 	def run(self):
 		while True:
+			background = pygame.image.load(join('..', 'graphics', 'bg.jpg'))
+			background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+			self.screen.blit(background, (0, 0))
 			# if self.level.status=='level1':
 				# print('Starting')
 			for event in pygame.event.get():
@@ -37,7 +40,14 @@ class Game:
 			if self.changed==False:
 				dt = self.clock.tick() / 1000
 				self.level.run(dt)
+				if self.level.is_game_over():
+					# self.level.game_over_screen(self.screen)
+					self.level = Level('level2')
+					self.changed=False
+					self.level.status='level2'
+					# print('game over')
 				pygame.display.update()
+
 			else:
 				dt = self.clock.tick() / 1000
 				self.level.run(dt)

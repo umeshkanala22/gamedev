@@ -10,6 +10,7 @@
     "fileStates": {
         "data/tsx/level1.tmx": {
             "expandedObjectLayers": [
+                7,
                 6,
                 5
             ],
@@ -21,11 +22,14 @@
             }
         },
         "data/tsx/level2.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 4,
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 0.33,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 8096,
-                "y": 871
+                "x": 6975.757575757575,
+                "y": 707.5757575757575
             }
         },
         "data/tsx/mainfactorytiles.tsx": {
