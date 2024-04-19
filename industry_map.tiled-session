@@ -10,15 +10,15 @@
     "fileStates": {
         "data/tsx/level1.tmx": {
             "expandedObjectLayers": [
-                7,
                 6,
+                7,
                 5
             ],
             "scale": 0.33,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 4154.545454545455,
-                "y": 998.4848484848484
+                "x": 3998.4848484848485,
+                "y": 798.4848484848485
             }
         },
         "data/tsx/level2.tmx": {

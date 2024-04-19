@@ -89,3 +89,10 @@ class Vertical_Moving_Block(Sprite):
 	
 	def draw(self, surface):
 		surface.blit(self.image, self.rect)
+
+class Goal(Sprite):
+	def __init__(self, pos, surf, groups):
+		super().__init__(groups)
+		self.image = surf
+		self.z = LAYERS2['goal']
+		self.rect = self.image.get_frect(topleft=pos)

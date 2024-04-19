@@ -8,14 +8,15 @@ class Game:
 		self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 		pygame.display.set_caption('Sprout land')
 		self.clock = pygame.time.Clock()
-		self.level = Level('level2')
+		self.level = Level('level1')
 		self.changed=False
 
 	def run(self):
 		while True:
-			background = pygame.image.load(join('..', 'graphics', 'bg.jpg'))
-			background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
-			self.screen.blit(background, (0, 0))
+			self.screen.fill('black')
+			# background = pygame.image.load(join('..', 'graphics', 'bg.jpg'))
+			# background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+			# self.screen.blit(background, (0, 0))
 			# if self.level.status=='level1':
 				# print('Starting')
 			for event in pygame.event.get():

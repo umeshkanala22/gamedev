@@ -5,7 +5,7 @@ from pygame.math import Vector2 as vector
 from os.path import join
 
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites, death_sprites, horizontal_moving_blocks):
+    def __init__(self, pos, groups, collision_sprites, death_sprites, horizontal_moving_blocks, goal_sprites):
         super().__init__(groups)
         self.import_assets()
         self.status = 'down'
@@ -14,7 +14,9 @@ class Player2(pygame.sprite.Sprite):
         self.image = self.animations[self.status][self.frame_index]
         self.levelchanger=False
         self.levelchangedto='level1'
-		
+
+        self.goal_reached = False
+        self.goal_sprites = goal_sprites
 
         #rects
 
@@ -139,6 +141,9 @@ class Player2(pygame.sprite.Sprite):
 
     # def show_lives(self):
 
+    def is_goal_reached(self):
+        return self.goal_reached
+    
     
     def update(self, dt):
         self.get_status()
@@ -186,6 +191,9 @@ class Player2(pygame.sprite.Sprite):
             # check collision in x
             if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                 dx = 0
+                if tile in self.goal_sprites:
+                    print('goal reached')
+                    self.goal_reached = True
             # check collision in y
             if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                 # print('collided')
@@ -202,6 +210,9 @@ class Player2(pygame.sprite.Sprite):
                         else:
                             self.rect.x = 4*TILE_SIZE
                             self.rect.y = 0
+                    if tile in self.goal_sprites:
+                        print('goal reached')
+                        self.goal_reached = True
                     # if tile in self.horizontal_moving_blocks:
                     #     self.rect.x += tile.speed * tile.direction
                     #     self.rect.y = tile.rect.top - self.rect.height - 5

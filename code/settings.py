@@ -25,6 +25,7 @@ LAYERS2 = {
     'movable_vertical':2,
     'movable_horizontal':3,
     'Deathlayer':4,
+    'goal': 5,
 }
 
 
