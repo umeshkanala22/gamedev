@@ -94,23 +94,44 @@ class Level:
 
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
-				
-				Horizontal_Moving_Block(
-					pos = (horizontal_obj.x, horizontal_obj.y),
-					surf = horizontal_obj.image,
-					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-					speed = 1,
-					distance_left= 10 * TILE_SIZE,
-					distance_right= 25 * TILE_SIZE)
+				if horizontal_obj.name == "stair_1":
+					# print(horizontal_obj.x, horizontal_obj.y)
+					Horizontal_Moving_Block(
+						pos = (horizontal_obj.x, horizontal_obj.y),
+						surf = horizontal_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
+						speed = 1,
+						distance_left= 10 * TILE_SIZE,
+						distance_right= 12 * TILE_SIZE)	
+				elif horizontal_obj.name == "stair_2":
+					# print(horizontal_obj.x, horizontal_obj.y)
+					Horizontal_Moving_Block(
+						pos = (horizontal_obj.x, horizontal_obj.y),
+						surf = horizontal_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
+						speed = 1,
+						distance_left= 5 * TILE_SIZE,
+						distance_right= 10 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
-				Vertical_Moving_Block(
-					pos = (vertical_obj.x, vertical_obj.y),
-					surf = vertical_obj.image,
-					groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
-					speed = 2,
-					distance_down = 8 * TILE_SIZE,
-					distance_up= 8 * TILE_SIZE)
+				if vertical_obj.name == "first_stair":
+					Vertical_Moving_Block(
+						pos = (vertical_obj.x, vertical_obj.y),
+						surf = vertical_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
+						speed = 2,
+						distance_down = 6 * TILE_SIZE,
+						distance_up= 10 * TILE_SIZE
+					)
+				elif vertical_obj.name == "second_stair":
+					Vertical_Moving_Block(
+						pos = (vertical_obj.x, vertical_obj.y),
+						surf = vertical_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
+						speed = 2,
+						distance_down = 8 * TILE_SIZE,
+					 distance_up= 25 * TILE_SIZE
+					)
 				
 			for goal in tmx_data.get_layer_by_name('goal'):
 				if goal.name == "goal":
