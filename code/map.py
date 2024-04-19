@@ -34,7 +34,7 @@ class Level:
 		if self.status =='map':
 			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
 		else:
-			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks,self.goal_sprites)
+			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
 		self.setup()
 		
 
@@ -99,7 +99,7 @@ class Level:
 					pos = (horizontal_obj.x, horizontal_obj.y),
 					surf = horizontal_obj.image,
 					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-					speed = 1.5,
+					speed = 1,
 					distance_left= 10 * TILE_SIZE,
 					distance_right= 25 * TILE_SIZE)
 			
@@ -111,6 +111,11 @@ class Level:
 					speed = 2,
 					distance_down = 8 * TILE_SIZE,
 					distance_up= 8 * TILE_SIZE)
+				
+			for goal in tmx_data.get_layer_by_name('goal'):
+				if goal.name == "goal":
+					Terrain((goal.x, goal.y), goal.image, [self.all_sprites, self.collision_sprites])
+					Goal((goal.x , goal.y), goal.image, [self.all_sprites, self.collision_sprites, self.goal_sprites])
 		
 		elif self.status == 'level2':
 			# self.players.append=Player2((20,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
@@ -164,6 +169,7 @@ class Level:
 				if goal.name == "goal":
 					Terrain((goal.x, goal.y), goal.image, [self.all_sprites, self.collision_sprites])
 					Goal((goal.x , goal.y), goal.image, [self.all_sprites, self.collision_sprites, self.goal_sprites])
+					# print(self.goal_sprites)
 
 		# elif self.status=='mainmenu':
 
