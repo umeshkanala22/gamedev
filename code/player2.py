@@ -21,7 +21,7 @@ class Player2(pygame.sprite.Sprite):
 
         self.old_rect = self.rect.copy()
         self.mask = pygame.mask.from_surface(self.image)
-        self.z=layers_2['constantterrrain']
+        self.z=LAYERS2['constantterrrain']
 
         # movement
         self.direction = 0
@@ -41,6 +41,7 @@ class Player2(pygame.sprite.Sprite):
         self.animations = {'up': [],'down': [],'left': [],'right': []}
         for animation in self.animations.keys():
             full_path = join(join('..', 'graphics', 'player'),animation)
+            print(full_path)
             self.animations[animation] = import_folder(full_path)
     def animate(self,dt):
         self.frame_index += 4 * dt

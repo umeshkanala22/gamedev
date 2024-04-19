@@ -21,7 +21,7 @@ class Level:
 
 		# setup
 		# self.player = Player((531,1095), self.all_sprites,self.collision_sprites)
-		self.player2 = Player2((200,500), self.all_sprites,self.collision_sprites)
+		self.player2 = Player2((0,0), self.all_sprites,self.collision_sprites)
 
 		self.setup()
 
@@ -65,19 +65,9 @@ class Level:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
 					Terrain((x*TILE_SIZE,y*TILE_SIZE), surf, (self.all_sprites, self.collision_sprites))
 		
-					Generic(
-						pos = (x*TILE_SIZE,y*TILE_SIZE),
-						surf = surf,
-						groups = self.all_sprites,
-						z = layers_2[layer])
 			for x, y, surf in tmx_data.get_layer_by_name('Deathlayer').tiles():
 				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites])
 
-				Generic(
-					pos = (x*TILE_SIZE,y*TILE_SIZE),
-					surf = surf,
-					groups = self.all_sprites,
-					z = layers_2['Deathlayer'])
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
 				
@@ -102,19 +92,9 @@ class Level:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
 					Terrain((x*TILE_SIZE,y*TILE_SIZE), surf, (self.all_sprites, self.collision_sprites))
 		
-					Generic(
-						pos = (x*TILE_SIZE,y*TILE_SIZE),
-						surf = surf,
-						groups = self.all_sprites,
-						z = layers_2[layer])
 			for x, y, surf in tmx_data.get_layer_by_name('Deathlayer').tiles():
 				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites])
 
-				Generic(
-					pos = (x*TILE_SIZE,y*TILE_SIZE),
-					surf = surf,
-					groups = self.all_sprites,
-					z = layers_2['Deathlayer'])
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
 				# print(horizontal_obj.x,horizontal_obj.y)
@@ -147,6 +127,13 @@ class Level:
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
+		elif status=='level2':
+			self.display_surface.fill('black')
+			self.all_sprites.custom_draw(self.player2,'level2')
+			self.horizontal_moving_blocks.draw(self.display_surface)
+			self.vertical_moving_blocks.draw(self.display_surface)
+			self.all_sprites.update(dt)
+
 		
 
 class CameraGroup(pygame.sprite.Group):
@@ -170,7 +157,7 @@ class CameraGroup(pygame.sprite.Group):
 			self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
 			self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
 
-			for layer in layers_2.values():
+			for layer in LAYERS2.values():
 				for sprite in self.sprites():
 					if sprite.z == layer:
 						offset_rect = sprite.rect.copy()

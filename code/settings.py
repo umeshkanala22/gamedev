@@ -19,10 +19,10 @@ LAYERS = {
 
 }
 
-layers_2 = {
+LAYERS2 = {
     'constantterrrain':1,
     'movable_vertical':2,
-    'movablehorizontal':3,
+    'movable_horizontal':3,
     'Deathlayer':4,
 }
 
