@@ -1,6 +1,8 @@
 import pygame
 from settings import *
 from support import *
+from os.path import join	
+
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, pos, group,collision_sprites):
@@ -10,6 +12,7 @@ class Player(pygame.sprite.Sprite):
 		self.status = 'up'
 		self.frame_index = 0
 
+		# print(self.animations)
 		# general setup
 		self.image = self.animations[self.status][self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
@@ -26,7 +29,7 @@ class Player(pygame.sprite.Sprite):
 		self.animations = {'up': [],'down': [],'left': [],'right': []}
 
 		for animation in self.animations.keys():
-			full_path = '/home/silversage22/Desktop/sem4/COP290/game/graphics/player/' + animation
+			full_path = join(join('..', 'graphics', 'player'),animation)
 			self.animations[animation] = import_folder(full_path)
 
 	def animate(self,dt):

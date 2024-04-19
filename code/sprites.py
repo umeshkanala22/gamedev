@@ -26,3 +26,60 @@ class base2(Generic):
 	def __init__(self, pos, surf, groups):
 		super().__init__(pos,surf,groups)
 		self.hitbox = self.rect.copy()
+
+
+class Terrain(Generic):
+	def __init__(self, pos, surf, groups):
+		super().__init__(pos, surf, groups)
+		self.image = surf
+		self.hitbox= self.rect.copy()
+		self.rect = self.image.get_frect(topleft=pos)
+		self.mask = pygame.mask.from_surface(self.image)
+		self.old_rect = self.rect.copy()
+
+class Horizontal_Moving_Block(Generic):
+	def __init__(self, pos, surf, groups,speed,distance):
+		super().__init__(pos, surf, groups)
+		self.image = surf
+		self.rect = self.image.get_rect(topleft = pos)
+		self.old_rect = self.rect.copy()
+		self.speed = speed
+		self.distance = distance
+		self.start_pos = (pos[0]-distance,pos[1])
+		self.end_pos = (pos[0]+distance,pos[1])
+		self.direction = 1
+	def update(self,dt):
+		self.rect.x += self.speed * self.direction * dt
+		if self.rect.x > self.end_pos[0] or self.rect.x < self.start_pos[0]:
+			self.rect.x = self.end_pos[0] if self.rect.x > self.end_pos[0] else self.start_pos[0]
+			self.direction *= -1
+
+	def draw(self,surface):
+		surface.blit(self.image,self.rect)
+
+from pygame.sprite import Sprite
+
+class Vertical_Moving_Block(Sprite):
+	def __init__(self, pos, surf, groups, speed, distance):
+		super().__init__(groups)
+		self.image = surf
+		self.z = layers_2['movable_vertical']
+		self.rect = self.image.get_rect(topleft=pos)
+		self.old_rect = self.rect.copy()
+		self.speed = speed
+		self.distance = distance
+		self.start_pos = (pos[0], pos[1]+distance)
+		self.end_pos = (pos[0], pos[1] - distance)
+		self.direction = 1
+	
+	def update(self, dt):
+		self.rect.y += self.speed * self.direction * dt
+		if self.rect.y > self.start_pos[1]:
+			self.rect.y = self.start_pos[1]
+			self.direction = -1
+		elif self.rect.y < self.end_pos[1]:
+			self.rect.y = self.end_pos[1]
+			self.direction = 1
+	
+	def draw(self, surface):
+		surface.blit(self.image, self.rect)
