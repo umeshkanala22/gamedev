@@ -8,7 +8,7 @@ class Game:
 		self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 		pygame.display.set_caption('Sprout land')
 		self.clock = pygame.time.Clock()
-		self.level = Level()
+		self.level = Level('map')
 
 	def run(self):
 		while True:
@@ -16,9 +16,19 @@ class Game:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-  
+				else:
+					if event.type == pygame.KEYDOWN:
+							if event.key == pygame.K_ESCAPE:
+								pygame.quit()
+								sys.exit()
+							
+			if self.level.player.levelchanger==True:
+					self.level.status = self.level.player.levelchangedto
+					self.level.player.levelchanger=False
+					print('statuschang')	
+
 			dt = self.clock.tick() / 1000
-			self.level.run(dt, 'level1')
+			self.level.run(dt)
 			pygame.display.update()
 
 if __name__ == '__main__':

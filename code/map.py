@@ -7,26 +7,33 @@ from pytmx.util_pygame import load_pygame
 from support import *
 from os.path import join
 class Level:
-	def __init__(self):
+	def __init__(self,status):
 
 		# get the display surface
 		self.display_surface = pygame.display.get_surface()
-		self.status='level2'
+		self.status=status
 		# sprite groups
 		self.all_sprites = CameraGroup()
 		self.collision_sprites=pygame.sprite.Group()
 
 		self.horizontal_moving_blocks = pygame.sprite.Group()
 		self.vertical_moving_blocks = pygame.sprite.Group()
+		self.haschanged = False
+		self.changedto='map'
 
 		# setup
-		# self.player = Player((531,1095), self.all_sprites,self.collision_sprites)
-		self.player2 = Player2((0,0), self.all_sprites,self.collision_sprites)
-
+		if self.status =='map':
+			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
+		else:
+			self.players=Player2((0,0), self.all_sprites,self.collision_sprites)
 		self.setup()
+		
+
+		
 
 	def setup(self):
 		if self.status=='map':
+			
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'map.tmx'))
 			for x, y, surf in tmx_data.get_layer_by_name('base2').tiles():
 				base2((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites])
@@ -51,15 +58,22 @@ class Level:
 			for  obj in tmx_data.get_layer_by_name('interactable'): 
 				if obj.id==902 or obj.id==901:		
 					scaled_image =pygame.transform.scale(obj.image,(int(obj.width*4),int(obj.height*4))) 
-					Interactable((obj.x-100,obj.y-100),scaled_image,[self.all_sprites,self.collision_sprites])
+					Interactable((obj.x-100,obj.y-100),scaled_image,[self.all_sprites,self.collision_sprites],'water')
 				else:
+				
 					scaled_image =pygame.transform.scale(obj.image,(int(obj.width*2),int(obj.height*2))) 
-					Interactable((obj.x,obj.y),scaled_image,[self.all_sprites,self.collision_sprites])
+					Interactable((obj.x,obj.y),scaled_image,[self.all_sprites,self.collision_sprites],'level1')
+				
+
+
 
 
 			self.player = Player((531,1095), self.all_sprites,self.collision_sprites)
 
+			
+
 		elif self.status=='level1':
+			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level1.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -85,8 +99,9 @@ class Level:
 					groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
 					speed = 150,
 					distance = 8 * TILE_SIZE)
-				
+		
 		elif self.status == 'level2':
+			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level2.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -113,23 +128,25 @@ class Level:
 						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
 						speed = 5,
 						distance = 5 * TILE_SIZE)
+		# elif self.status=='mainmenu':
+
 				
 
 
-	def run(self,dt,status):
-		if status=='map':
+	def run(self,dt):
+		if self.status=='map':
 			self.display_surface.fill('black')
-			self.all_sprites.custom_draw(self.player,'map')
+			self.all_sprites.custom_draw(self.players,'map')
 			self.all_sprites.update(dt)
-		elif status=='level1':
+		elif self.status=='level1':
 			self.display_surface.fill('black')
-			self.all_sprites.custom_draw(self.player2,'level1')
+			self.all_sprites.custom_draw(self.players,'level1')
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
-		elif status=='level2':
+		elif self.status=='level2':
 			self.display_surface.fill('black')
-			self.all_sprites.custom_draw(self.player2,'level2')
+			self.all_sprites.custom_draw(self.players,'level2')
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)

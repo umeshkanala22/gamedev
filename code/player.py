@@ -22,8 +22,9 @@ class Player(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2()
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.speed = 200
-
-		self.hitbox=self.rect.copy().inflate((-126,-70))
+		self.levelchanger=False
+		self.levelchangedto='map'
+		self.hitbox=self.rect.copy()
 		self.collision_sprites = collision_sprites
 	def import_assets(self):
 		self.animations = {'up': [],'down': [],'left': [],'right': []}
@@ -79,12 +80,20 @@ class Player(pygame.sprite.Sprite):
 						self.pos.x = self.hitbox.centerx
 
 					if direction == 'vertical':
+						if hasattr(sprite,'l'):
+							print('collision detected')
+							self.levelchanger=True
+							self.levelchangedto=sprite.l
+						print("vertical collisondetectedd")
 						if self.direction.y > 0: # moving down
 							self.hitbox.bottom = sprite.hitbox.top
 						if self.direction.y < 0: # moving up
 							self.hitbox.top = sprite.hitbox.bottom
 						self.rect.centery = self.hitbox.centery
 						self.pos.y = self.hitbox.centery
+			
+			
+				
 
 
 	def move(self,dt):

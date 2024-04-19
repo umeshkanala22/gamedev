@@ -10,6 +10,7 @@ class Player2(pygame.sprite.Sprite):
         self.import_assets()
         self.status = 'down'
         self.frame_index = 0
+        self.life=3
         self.image = self.animations[self.status][self.frame_index]
 
         #rects

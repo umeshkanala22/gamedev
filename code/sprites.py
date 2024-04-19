@@ -9,8 +9,9 @@ class Generic(pygame.sprite.Sprite):
 		self.z = z
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.75)
 class Interactable(Generic):
-	def __init__(self, pos, surf, groups):
+	def __init__(self, pos, surf, groups,levelchanger):
 		super().__init__(pos,surf,groups)
+		self.l=levelchanger
 		self.hitbox = self.rect.copy().inflate(-20,-self.rect.height* 0.5)
 class nonInteractable(Generic):
 	def __init__(self, pos, surf, groups):
