@@ -8,11 +8,12 @@ from support import *
 from os.path import join
 import sys
 class Level:
-	def __init__(self,status):
+	def __init__(self,status,tolevel):
 
 		# get the display surface
 		self.display_surface = pygame.display.get_surface()
 		self.status=status
+		self.tolevel=tolevel
 		# sprite groups
 		self.all_sprites = CameraGroup()
 		self.collision_sprites=pygame.sprite.Group()
@@ -31,10 +32,8 @@ class Level:
 		self.clock = pygame.time.Clock()
 
 		# setup
-		if self.status =='map':
-			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
-		else:
-			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
+		
+		
 		self.setup()
 		
 
@@ -78,12 +77,12 @@ class Level:
 
 
 
-			self.player = Player((531,1095), self.all_sprites,self.collision_sprites)
+			self.players=Player((531,1095), self.all_sprites,self.collision_sprites,self.tolevel)
 
 			
 
 		elif self.status=='level1':
-			# self.players=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
+
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level1.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -137,9 +136,9 @@ class Level:
 				if goal.name == "goal":
 					Terrain((goal.x, goal.y), goal.image, [self.all_sprites, self.collision_sprites])
 					Goal((goal.x , goal.y), goal.image, [self.all_sprites, self.collision_sprites, self.goal_sprites])
-		
+			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks,self.goal_sprites,self.tolevel)
 		elif self.status == 'level2':
-			# self.players.append=Player2((20,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
+		
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level2.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -190,7 +189,7 @@ class Level:
 				if goal.name == "goal":
 					Terrain((goal.x, goal.y), goal.image, [self.all_sprites, self.collision_sprites])
 					Goal((goal.x , goal.y), goal.image, [self.all_sprites, self.collision_sprites, self.goal_sprites])
-					# print(self.goal_sprites)
+			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks,self.goal_sprites,self.tolevel)
 
 		# elif self.status=='mainmenu':
 
@@ -237,6 +236,7 @@ class Level:
 		# exit()
 
 	def run(self,dt):
+		self.tolevel=self.players.tolevel
 		if self.status=='map':
 			self.display_surface.fill('black')
 			self.all_sprites.custom_draw(self.players,'map')
