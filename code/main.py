@@ -43,9 +43,8 @@ class Game:
 				self.level.run(dt)
 				if self.level.is_game_over():
 					# self.level.game_over_screen(self.screen)
-					self.level = Level('level2')
+					self.level = Level(self.level.status)
 					self.changed=False
-					self.level.status='level2'
 					# print('game over')
 				pygame.display.update()
 
