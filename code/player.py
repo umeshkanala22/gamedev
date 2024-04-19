@@ -5,13 +5,13 @@ from os.path import join
 
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, pos, group,collision_sprites):
+	def __init__(self, pos, group,collision_sprites,tolevel):
 		super().__init__(group)
 
 		self.import_assets()
 		self.status = 'up'
 		self.frame_index = 0
-
+		self.tolevel = tolevel
 		# print(self.animations)
 		# general setup
 		self.image = self.animations[self.status][self.frame_index]
@@ -84,7 +84,8 @@ class Player(pygame.sprite.Sprite):
 							print('collision detected')
 							self.levelchanger=True
 							self.levelchangedto=sprite.l
-						print("vertical collisondetectedd")
+							self.tolevel='level1'
+						
 						if self.direction.y > 0: # moving down
 							self.hitbox.bottom = sprite.hitbox.top
 						if self.direction.y < 0: # moving up
@@ -101,6 +102,8 @@ class Player(pygame.sprite.Sprite):
 		keys=pygame.key.get_pressed()
 		if keys[pygame.K_LSHIFT]:
 			speedup=1
+		if keys[pygame.K_RSHIFT]:
+			self.tolevel='level1'
 
 		# normalizing a vector 
 		if self.direction.magnitude() > 0:

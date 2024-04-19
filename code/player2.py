@@ -5,7 +5,7 @@ from pygame.math import Vector2 as vector
 from os.path import join
 
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites, death_sprites, horizontal_moving_blocks):
+    def __init__(self, pos, groups, collision_sprites, death_sprites, horizontal_moving_blocks, goal_sprites,tolevel):
         super().__init__(groups)
         self.import_assets()
         self.status = 'down'
@@ -14,7 +14,7 @@ class Player2(pygame.sprite.Sprite):
         self.image = self.animations[self.status][self.frame_index]
         self.levelchanger=False
         self.levelchangedto='level1'
-
+        self.tolevel = tolevel
         self.goal_reached = False
         # print(goal_sprites)
 
