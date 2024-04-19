@@ -110,8 +110,8 @@ class Level:
 						surf = horizontal_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
 						speed = 1,
-						distance_left= 5 * TILE_SIZE,
-						distance_right= 10 * TILE_SIZE)
+						distance_left= 7 * TILE_SIZE,
+						distance_right= 14 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
 				if vertical_obj.name == "first_stair":
@@ -129,8 +129,8 @@ class Level:
 						surf = vertical_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
 						speed = 2,
-						distance_down = 8 * TILE_SIZE,
-					 distance_up= 25 * TILE_SIZE
+						distance_down = 4 * TILE_SIZE,
+					 distance_up= 13 * TILE_SIZE
 					)
 				
 			for goal in tmx_data.get_layer_by_name('goal'):
