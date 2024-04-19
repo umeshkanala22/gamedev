@@ -73,7 +73,7 @@ class Level:
 			
 
 		elif self.status=='level1':
-			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites)
+			self.players=Player2((0,0), self.all_sprites,self.collision_sprites)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level1.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():

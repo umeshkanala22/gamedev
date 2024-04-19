@@ -12,8 +12,12 @@ class Player2(pygame.sprite.Sprite):
         self.frame_index = 0
         self.life=3
         self.image = self.animations[self.status][self.frame_index]
+        self.levelchanger=False
+        self.levelchangedto='level1'
+		
 
         #rects
+
         self.rect = self.image.get_frect()
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -42,7 +46,6 @@ class Player2(pygame.sprite.Sprite):
         self.animations = {'up': [],'down': [],'left': [],'right': []}
         for animation in self.animations.keys():
             full_path = join(join('..', 'graphics', 'player'),animation)
-            print(full_path)
             self.animations[animation] = import_folder(full_path)
     def animate(self,dt):
         self.frame_index += 4 * dt
