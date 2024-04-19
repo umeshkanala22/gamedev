@@ -14,11 +14,11 @@
                 7,
                 5
             ],
-            "scale": 0.33,
+            "scale": 0.75,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 3998.4848484848485,
-                "y": 798.4848484848485
+                "x": 8153.333333333333,
+                "y": 488.66666666666663
             }
         },
         "data/tsx/level2.tmx": {
@@ -26,10 +26,10 @@
                 7
             ],
             "scale": 0.33,
-            "selectedLayer": 3,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 6975.757575757575,
-                "y": 707.5757575757575
+                "x": 7360.60606060606,
+                "y": 704.5454545454545
             }
         },
         "data/tsx/mainfactorytiles.tsx": {
