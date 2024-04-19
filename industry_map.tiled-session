@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "data/tsx/level2.tmx",
+    "activeFile": "data/tsx/level1.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -14,11 +14,11 @@
                 7,
                 5
             ],
-            "scale": 0.75,
-            "selectedLayer": 3,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 8153.333333333333,
-                "y": 488.66666666666663
+                "x": 7266.666666666666,
+                "y": 743.9393939393939
             }
         },
         "data/tsx/level2.tmx": {
@@ -107,9 +107,9 @@
     ],
     "project": "industry_map.tiled-project",
     "recentFiles": [
-        "data/tsx/level1.tmx",
-        "data/tsx/movableobjects.tsx",
         "data/tsx/level2.tmx",
+        "data/tsx/movableobjects.tsx",
+        "data/tsx/level1.tmx",
         "industry_map/tileset2.tsx",
         "industry_map/level_1.tmx",
         "industry_cleanup/data/levels/level1.tmx",
