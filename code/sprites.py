@@ -39,21 +39,25 @@ class Terrain(Generic):
 		self.old_rect = self.rect.copy()
 
 class Horizontal_Moving_Block(Generic):
-	def __init__(self, pos, surf, groups,speed,distance):
+	def __init__(self, pos, surf, groups,speed,distance_left, distance_right):
 		super().__init__(pos, surf, groups)
 		self.image = surf
 		self.rect = self.image.get_rect(topleft = pos)
 		self.old_rect = self.rect.copy()
 		self.speed = speed
-		self.distance = distance
-		self.start_pos = (pos[0]-distance,pos[1])
-		self.end_pos = (pos[0]+distance,pos[1])
+		self.distance_left = distance_left
+		self.distance_right = distance_right
+		self.start_pos = (pos[0] - distance_left, pos[1])
+		self.end_pos = (pos[0] + distance_right, pos[1])
 		self.direction = 1
 	def update(self,dt):
 		self.rect.x += self.speed * self.direction * dt
-		if self.rect.x > self.end_pos[0] or self.rect.x < self.start_pos[0]:
-			self.rect.x = self.end_pos[0] if self.rect.x > self.end_pos[0] else self.start_pos[0]
-			self.direction *= -1
+		if self.rect.x > self.start_pos[0]:
+			self.rect.x = self.start_pos[0]
+			self.direction = -1
+		elif self.rect.x < self.end_pos[0]:
+			self.rect.x = self.end_pos[0]
+			self.direction = 1
 
 	def draw(self,surface):
 		surface.blit(self.image,self.rect)

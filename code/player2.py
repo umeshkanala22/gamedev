@@ -5,7 +5,7 @@ from pygame.math import Vector2 as vector
 from os.path import join
 
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites):
+    def __init__(self, pos, groups, collision_sprites, death_sprites):
         super().__init__(groups)
         self.import_assets()
         self.status = 'down'
@@ -28,6 +28,8 @@ class Player2(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.z=LAYERS2['constantterrrain']
 
+        self.living = True
+
         # movement
         self.direction = 0
         # self.speed = 200
@@ -40,6 +42,7 @@ class Player2(pygame.sprite.Sprite):
 
         # collision
         self.collision_sprites = collision_sprites
+        self.death_sprites =death_sprites
         # self.on_surface = {'floor': False, 'left': False, 'right': False}
 
     def import_assets(self):
@@ -129,7 +132,9 @@ class Player2(pygame.sprite.Sprite):
     #                     self.rect.bottom = sprite.rect.top
     #                 self.direction.y = 0
 
-
+    def is_dead(self):
+        return not self.living
+    
     def update(self, dt):
         self.animate(dt)
 
@@ -181,6 +186,8 @@ class Player2(pygame.sprite.Sprite):
                     self.vel_y = 0
                 # check if above the ground i.e. falling
                 elif self.vel_y >= 0:
+                    if tile in self.death_sprites:
+                        self.living = False
                     # print('collided')
                     self.jumped = False
                     dy = tile.rect.top - self.rect.bottom

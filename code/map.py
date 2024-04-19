@@ -6,6 +6,7 @@ from sprites import Generic,Interactable,nonInteractable,fence,base2,Terrain, Ho
 from pytmx.util_pygame import load_pygame
 from support import *
 from os.path import join
+import sys
 class Level:
 	def __init__(self,status):
 
@@ -16,6 +17,8 @@ class Level:
 		self.all_sprites = CameraGroup()
 		self.collision_sprites=pygame.sprite.Group()
 
+		self.death_sprites = pygame.sprite.Group()
+
 		self.horizontal_moving_blocks = pygame.sprite.Group()
 		self.vertical_moving_blocks = pygame.sprite.Group()
 		self.haschanged = False
@@ -25,7 +28,7 @@ class Level:
 		if self.status =='map':
 			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
 		else:
-			self.players=Player2((0,0), self.all_sprites,self.collision_sprites)
+			self.players=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites)
 		self.setup()
 		
 
@@ -80,7 +83,7 @@ class Level:
 					Terrain((x*TILE_SIZE,y*TILE_SIZE), surf, (self.all_sprites, self.collision_sprites))
 		
 			for x, y, surf in tmx_data.get_layer_by_name('Deathlayer').tiles():
-				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites])
+				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites, self.death_sprites])
 
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
@@ -90,7 +93,8 @@ class Level:
 					surf = horizontal_obj.image,
 					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
 					speed = 150,
-					distance = 15 * TILE_SIZE)
+					distance_left= 3 * TILE_SIZE,
+					distance_right= 3 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
 				Vertical_Moving_Block(
@@ -101,14 +105,14 @@ class Level:
 					distance = 8 * TILE_SIZE)
 		
 		elif self.status == 'level2':
-			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites)
+			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level2.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
 					Terrain((x*TILE_SIZE,y*TILE_SIZE), surf, (self.all_sprites, self.collision_sprites))
 		
 			for x, y, surf in tmx_data.get_layer_by_name('Deathlayer').tiles():
-				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites])
+				Terrain((x * TILE_SIZE,y * TILE_SIZE), surf, [self.all_sprites,self.collision_sprites, self.death_sprites])
 
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
@@ -117,8 +121,9 @@ class Level:
 					pos = (horizontal_obj.x, horizontal_obj.y),
 					surf = horizontal_obj.image,
 					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-					speed = 150,
-					distance = 2 * TILE_SIZE)
+					speed = 15,
+					distance_left= 2 * TILE_SIZE,
+					distance_right= 3 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
 				# if vertical_obj.name == "first_stair":
@@ -130,8 +135,31 @@ class Level:
 						distance = 5 * TILE_SIZE)
 		# elif self.status=='mainmenu':
 
-				
+	def wait_for_key(self):
+		waiting = True
+		while waiting:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+				elif event.type == pygame.KEYDOWN:
+					waiting = False
 
+
+	def show_text_on_screen(self, screen, text, font_size, y_position):
+		font = pygame.font.Font(None, font_size)
+		text_render = font.render(text, True, (255, 255, 255))
+		text_rect = text_render.get_rect(center=(SCREEN_WIDTH // 2, y_position))
+		screen.blit(text_render, text_rect)
+
+
+	def game_over_screen(self, screen):
+		screen.fill((0, 0, 0))
+		self.show_text_on_screen(screen, "Game Over", 100, SCREEN_HEIGHT // 2)
+		self.show_text_on_screen(screen, "Press any key to exit", 50, SCREEN_HEIGHT // 2 + 100)
+		pygame.display.flip()
+		self.wait_for_key()
+		exit()
 
 	def run(self,dt):
 		if self.status=='map':
@@ -144,12 +172,18 @@ class Level:
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
+			# check that player is alive or not
+			if self.players.is_dead():
+				self.game_over_screen(self.display_surface)
 		elif self.status=='level2':
 			self.display_surface.fill('black')
 			self.all_sprites.custom_draw(self.players,'level2')
 			self.horizontal_moving_blocks.draw(self.display_surface)
 			self.vertical_moving_blocks.draw(self.display_surface)
 			self.all_sprites.update(dt)
+			# check that player is alive or not
+			if self.players.is_dead():
+				self.game_over_screen(self.display_surface)
 
 		
 
