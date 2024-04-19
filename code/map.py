@@ -28,7 +28,7 @@ class Level:
 		if self.status =='map':
 			self.players=Player((531,1095), self.all_sprites,self.collision_sprites)
 		else:
-			self.players=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites)
+			self.players=Player2((4*TILE_SIZE,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
 		self.setup()
 		
 
@@ -76,7 +76,7 @@ class Level:
 			
 
 		elif self.status=='level1':
-			self.players=Player2((0,0), self.all_sprites,self.collision_sprites)
+			# self.players=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level1.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -92,9 +92,9 @@ class Level:
 					pos = (horizontal_obj.x, horizontal_obj.y),
 					surf = horizontal_obj.image,
 					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-					speed = 150,
-					distance_left= 3 * TILE_SIZE,
-					distance_right= 3 * TILE_SIZE)
+					speed = 2,
+					distance_left= 10 * TILE_SIZE,
+					distance_right= 25 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
 				Vertical_Moving_Block(
@@ -102,10 +102,11 @@ class Level:
 					surf = vertical_obj.image,
 					groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
 					speed = 150,
-					distance = 8 * TILE_SIZE)
+					distance_down = 8 * TILE_SIZE,
+					distance_up= 8 * TILE_SIZE)
 		
 		elif self.status == 'level2':
-			self.players.append=Player2((0,0), self.all_sprites,self.collision_sprites, self.death_sprites)
+			# self.players.append=Player2((20,0), self.all_sprites,self.collision_sprites, self.death_sprites, self.horizontal_moving_blocks)
 			tmx_data=load_pygame(join('..', 'data', 'tsx', 'level2.tmx'))
 			for  layer in ['constantterrrain']:
 				for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -116,23 +117,50 @@ class Level:
 
 				
 			for horizontal_obj in tmx_data.get_layer_by_name('movable_horizontal'):
-				# print(horizontal_obj.x,horizontal_obj.y)
-				Horizontal_Moving_Block(
-					pos = (horizontal_obj.x, horizontal_obj.y),
-					surf = horizontal_obj.image,
-					groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
-					speed = 15,
-					distance_left= 2 * TILE_SIZE,
-					distance_right= 3 * TILE_SIZE)
+				if horizontal_obj.name == "step_2":
+					Horizontal_Moving_Block(
+						pos = (horizontal_obj.x, horizontal_obj.y),
+						surf = horizontal_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
+						speed = 2,
+						distance_left= 0,
+						distance_right= 14 * TILE_SIZE)
+				elif horizontal_obj.name == "step_1":
+					Horizontal_Moving_Block(
+						pos = (horizontal_obj.x, horizontal_obj.y),
+						surf = horizontal_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
+						speed = 2,
+						distance_left= 3 * TILE_SIZE,
+						distance_right= 20 * TILE_SIZE)
+				elif horizontal_obj.name == "step_3":
+					Horizontal_Moving_Block(
+						pos = (horizontal_obj.x, horizontal_obj.y),
+						surf = horizontal_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.horizontal_moving_blocks),
+						speed = 2,
+						distance_left= 1 * TILE_SIZE,
+						distance_right= 10 * TILE_SIZE)
 			
 			for vertical_obj in tmx_data.get_layer_by_name('movable_vertical'):
-				# if vertical_obj.name == "first_stair":
+				if vertical_obj.name == "level":
 					Vertical_Moving_Block(
 						pos = (vertical_obj.x, vertical_obj.y),
 						surf = vertical_obj.image,
 						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
-						speed = 5,
-						distance = 5 * TILE_SIZE)
+						speed = 150,
+						distance_down = 8 * TILE_SIZE,
+						distance_up= 8 * TILE_SIZE
+					)
+				elif vertical_obj.name == "final_gate":
+					Vertical_Moving_Block(
+						pos = (vertical_obj.x, vertical_obj.y),
+						surf = vertical_obj.image,
+						groups = (self.all_sprites, self.collision_sprites, self.vertical_moving_blocks),
+						speed = 150,
+						distance_down = 0,
+						distance_up= 5 * TILE_SIZE
+					)
 		# elif self.status=='mainmenu':
 
 	def wait_for_key(self):

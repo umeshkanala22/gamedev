@@ -51,13 +51,13 @@ class Horizontal_Moving_Block(Generic):
 		self.end_pos = (pos[0] + distance_right, pos[1])
 		self.direction = 1
 	def update(self,dt):
-		self.rect.x += self.speed * self.direction * dt
-		if self.rect.x > self.start_pos[0]:
+		self.rect.x += self.speed * self.direction
+		if self.rect.x < self.start_pos[0]:
 			self.rect.x = self.start_pos[0]
-			self.direction = -1
-		elif self.rect.x < self.end_pos[0]:
-			self.rect.x = self.end_pos[0]
 			self.direction = 1
+		elif self.rect.x > self.end_pos[0]:
+			self.rect.x = self.end_pos[0]
+			self.direction = -1
 
 	def draw(self,surface):
 		surface.blit(self.image,self.rect)
@@ -65,16 +65,17 @@ class Horizontal_Moving_Block(Generic):
 from pygame.sprite import Sprite
 
 class Vertical_Moving_Block(Sprite):
-	def __init__(self, pos, surf, groups, speed, distance):
+	def __init__(self, pos, surf, groups, speed, distance_down, distance_up):
 		super().__init__(groups)
 		self.image = surf
 		self.z = LAYERS2['movable_vertical']
 		self.rect = self.image.get_rect(topleft=pos)
 		self.old_rect = self.rect.copy()
 		self.speed = speed
-		self.distance = distance
-		self.start_pos = (pos[0], pos[1]+distance)
-		self.end_pos = (pos[0], pos[1] - distance)
+		self.distance_down = distance_down
+		self.distance_up = distance_up
+		self.start_pos = (pos[0], pos[1] + distance_down)
+		self.end_pos = (pos[0], pos[1] - distance_up)
 		self.direction = 1
 	
 	def update(self, dt):

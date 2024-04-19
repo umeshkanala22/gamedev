@@ -13,8 +13,8 @@ class Game:
 
 	def run(self):
 		while True:
-			if self.level.status=='level1':
-				print('Starting')
+			# if self.level.status=='level1':
+				# print('Starting')
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					pygame.quit()

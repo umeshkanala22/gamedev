@@ -5,7 +5,7 @@ from pygame.math import Vector2 as vector
 from os.path import join
 
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites, death_sprites):
+    def __init__(self, pos, groups, collision_sprites, death_sprites, horizontal_moving_blocks):
         super().__init__(groups)
         self.import_assets()
         self.status = 'down'
@@ -29,6 +29,8 @@ class Player2(pygame.sprite.Sprite):
         self.z=LAYERS2['constantterrrain']
 
         self.living = True
+        self.on_moving_block = False
+        self.horizontal_moving_blocks = horizontal_moving_blocks
 
         # movement
         self.direction = 0
@@ -134,9 +136,26 @@ class Player2(pygame.sprite.Sprite):
 
     def is_dead(self):
         return not self.living
+
+
+    def on_horizontal_moving_block(self):
+        for block in self.horizontal_moving_blocks:
+            if self.rect.colliderect(block.rect):
+                block_dir = block.direction
+                block_speed = block.speed
+                
+                # Move the player with the block horizontally
+                self.rect.x += block_dir * block_speed
+                
+                # Adjust the player's y-coordinate to stay on top of the block
+                self.rect.y = block.rect.y - self.height
+                
+        self.on_moving_block = False
+
     
     def update(self, dt):
         self.animate(dt)
+        # self.on_horizontal_moving_block()
 
         dx = 0
         dy = 0
@@ -188,6 +207,9 @@ class Player2(pygame.sprite.Sprite):
                 elif self.vel_y >= 0:
                     if tile in self.death_sprites:
                         self.living = False
+                    # if tile in self.horizontal_moving_blocks:
+                    #     self.rect.x += tile.speed * tile.direction
+                    #     self.rect.y = tile.rect.top - self.rect.height - 5
                     # print('collided')
                     self.jumped = False
                     dy = tile.rect.top - self.rect.bottom
